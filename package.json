@@ -1,0 +1,14 @@
+{
+  "name": "shutter",
+  "private": true,
+  "scripts": {
+    "build": "oao run-script --parallel build",
+    "test": "oao run-script --parallel test"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "oao": "^1.2.1"
+  }
+}

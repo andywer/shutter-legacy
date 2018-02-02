@@ -1,0 +1,23 @@
+{
+  "name": "@andywer/shutter",
+  "version": "0.0.0",
+  "description": "Visual snapshot testing with no effort.",
+  "license": "MIT",
+  "author": "Andy Wermke (https://github.com/andywer)",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "keywords": [
+    "snapshot",
+    "testing",
+    "visual"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "tslint --project . 'src/**/*.ts' -e '**/*.d.ts'"
+  },
+  "devDependencies": {
+    "tslint": "^5.9.1",
+    "tslint-config-standard": "^7.0.0",
+    "typescript": "^2.7.1"
+  }
+}
