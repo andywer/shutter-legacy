@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "tslint --project . 'src/**/*.ts' -e '**/*.d.ts'"
+    "test": "tslint --project . 'src/**/*.ts' -e '**/*.d.ts'",
+    "prepublishOnly": "yarn build && yarn test"
   },
   "devDependencies": {
     "@types/dashify": "^1.0.0",
