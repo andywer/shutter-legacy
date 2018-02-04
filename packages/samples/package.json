@@ -1,0 +1,22 @@
+{
+  "name": "@andywer/shutter-samples",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shutter usage samples.",
+  "license": "MIT",
+  "author": "Andy Wermke (https://github.com/andywer)",
+  "scripts": {
+    "test": "ava-ts"
+  },
+  "dependencies": {
+    "@andywer/shutter": "^0.0.0",
+    "@andywer/shutter-react": "^0.0.0"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "ava-ts": "^0.24.1",
+    "react": "^16.2.0",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.7.1"
+  }
+}
