@@ -5,18 +5,18 @@ import test from 'ava'
 import { createShutter } from 'shutter'
 import { createReactShutter } from '@shutter/react'
 
-const shutter = createShutter()
-const reactShutter = createReactShutter()
+const shutter = createShutter(__dirname)
+const reactShutter = createReactShutter(__dirname)
 
 const MyButton = ({ label }) => <button>{label}</button>
 
 test('Button in default state', async t => {
-  await reactShutter.snapshot(<MyButton label='Click me' />)
+  await reactShutter.snapshot('Button in default state', <MyButton label='Click me' />)
   t.pass()
 })
 
 test('Button in default state', async t => {
-  await shutter.snapshot(`<button>Click me</button>`)
+  await shutter.snapshot('Button in default state', `<button>Click me</button>`)
   t.pass()
 })
 ```
@@ -27,19 +27,24 @@ test('Button in default state', async t => {
 ```ts
 declare function createShutter (options: Options = {}): ShutterInstance
 
-type Options = {
+export type Options = {
   // Custom renderer, taking some HTML content snippet and returning a complete HTML document
   // Defaults to looking for a custom layout file, falling back to a generic layout otherwise
-  layout?: ({ content: HTMLString }) => HTMLString,
+  layout?: (page: { content: HTMLString }) => HTMLString,
 
-  // Path to directory where snapshots will be saved
-  // Defaults to `${dirName(testFilePath)}/snapshots`
-  snapshotsPath?: string,
+  // Custom function to determine the port to use for the server
+  // Defaults to using a random unused port
+  getPort?: () => Promise<number>,
 
-  // Path to test file
-  // Defaults to the file where createShutter() was called
-  testFilePath?: string
+  // Path to directory where current run's snapshots and diffs will be saved
+  // Defaults to `${testDirPath}/.last-run`
+  lastRunPath?: string,
+
+  // Path to directory where snapshots (the test expectations) will be saved
+  // Defaults to `${testDirPath}/snapshots`
+  snapshotsPath?: string
 }
+
 type HTMLString = string
 ```
 

@@ -16,8 +16,32 @@
     "test": "tslint --project . 'src/**/*.ts' -e '**/*.d.ts'"
   },
   "devDependencies": {
+    "@types/dashify": "^1.0.0",
+    "@types/debug": "^0.0.30",
+    "@types/get-port": "^3.2.0",
+    "@types/koa": "^2.0.43",
+    "@types/koa-route": "^3.2.3",
+    "@types/koa-static": "^4.0.0",
+    "@types/minimist": "^1.2.0",
+    "@types/mz": "^0.0.32",
+    "@types/pixelmatch": "^4.0.0",
+    "@types/pngjs": "^3.3.0",
+    "@types/puppeteer": "^1.0.0",
     "tslint": "^5.9.1",
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.7.1"
+  },
+  "dependencies": {
+    "dashify": "^1.0.0",
+    "debug": "^3.1.0",
+    "get-port": "^3.2.0",
+    "koa": "^2.4.1",
+    "koa-route": "^3.2.0",
+    "koa-static": "^4.0.2",
+    "minimist": "^1.2.0",
+    "mz": "^2.7.0",
+    "pixelmatch": "^4.0.2",
+    "pngjs": "^3.3.1",
+    "puppeteer": "^1.0.0"
   }
 }
