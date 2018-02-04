@@ -1,5 +1,7 @@
 # Idea
 
+As inspired by <https://meowni.ca/posts/2017-puppeteer-tests/>.
+
 ```tsx
 import test from 'ava'
 import { createShutter } from 'shutter'
