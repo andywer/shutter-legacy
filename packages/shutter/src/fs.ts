@@ -38,9 +38,9 @@ export function bindSnapshotFileFunctions ({ lastRunPath, snapshotsPath }: Optio
       return fileOrDirectoryExists(snapshotPath(snapshotID))
     },
 
-    async saveSnapshot (snapshotID: string, pngBuffer: Buffer) {
+    async saveSnapshot (snapshotID: string, png: PNG) {
       await mkdirIfMissing(snapshotsPath)
-      return fs.writeFile(snapshotPath(snapshotID), pngBuffer)
+      return writeStream(snapshotPath(snapshotID), png.pack())
     },
 
     async loadSnapshot (snapshotID: string): Promise<Buffer> {

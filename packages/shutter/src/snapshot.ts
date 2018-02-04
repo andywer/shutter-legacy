@@ -1,16 +1,10 @@
 import { Browser } from 'puppeteer'
 import { PNG } from 'pngjs'
 import createDebugLogger = require('debug')
-import pixelmatch = require('pixelmatch')
 import { bindSnapshotFileFunctions } from './fs'
+import { autoCrop, autoCropToMatch, diff as diffPNGs, pngFromBuffer } from './image'
 
 const debugLog = createDebugLogger('shutter:snapshot')
-
-const pngFromBuffer = async (buffer: Buffer): Promise<PNG> => {
-  return new Promise<PNG>((resolve, reject) => {
-    const png = new PNG().parse(buffer, error => error ? reject(error) : resolve(png))
-  })
-}
 
 export default async function snapshot (snapshotID: string, browser: Browser, servedOnURL: string, options: Options) {
   const { lastRunPath, snapshotsPath, updateSnapshot } = options
@@ -24,24 +18,29 @@ export default async function snapshot (snapshotID: string, browser: Browser, se
   try {
     await page.goto(servedOnURL)
     debugLog(`Taking screenshot`)
-    const actualPNGBuffer = await page.screenshot({ omitBackground: true })
+    const actualPNGBuffer = await autoCrop(await page.screenshot({ omitBackground: true }))
     const actualPNG = await pngFromBuffer(actualPNGBuffer)
 
     if (updateSnapshot || ! await snapshotExists(snapshotID)) {
       debugLog(`Updating snapshot on disk`)
-      await saveSnapshot(snapshotID, actualPNGBuffer)
+      await saveSnapshot(snapshotID, actualPNG)
     } else {
       debugLog(`Using snapshot from disk as expected image`)
     }
 
-    const expectedPNG = await pngFromBuffer(await loadSnapshot(snapshotID))
+    const expectedPNGBuffer = await loadSnapshot(snapshotID)
+    const expectedPNG = await pngFromBuffer(expectedPNGBuffer)
     debugLog(`Diffing images`)
-    const { diff, match } = await diffPNGs(expectedPNG, actualPNG)
+    const [ croppedExpected, croppedActual ] = await autoCropToMatch(expectedPNGBuffer, actualPNGBuffer)
+    const { diff, mismatchedPixels, width, height } = await diffPNGs(croppedExpected, croppedActual)
+
+    debugLog(`Mismatching pixels: ${mismatchedPixels} of ${width * height} pixels (${width}x${height} image)`)
+    const relativeThreshold = 0.01
 
     debugLog(`Saving results`)
-    const resultsPath = await saveResults(snapshotID, expectedPNG, actualPNG, diff)
+    const resultsPath = await saveResults(snapshotID, croppedExpected, croppedActual, diff)
 
-    if (!match) {
+    if (mismatchedPixels >= width * height * relativeThreshold) {
       debugLog(`Rendered document ${snapshotID} does not match snapshot.`)
       // TODO: Throw better error
       throw new Error(`Screenshot does not match visual snapshot. See ${resultsPath}`)
@@ -57,24 +56,4 @@ export type Options = {
   lastRunPath: string,
   snapshotsPath: string,
   updateSnapshot: boolean
-}
-
-async function diffPNGs (expected: PNG, actual: PNG) {
-  if (actual.width !== expected.width || actual.height !== expected.height) {
-    // TODO: Autocrop both images (https://github.com/oliver-moran/jimp)
-    // TODO: Make images same size
-    throw new Error(`Image sizes do not match. Snapshot: ${expected.width}x${expected.height}. Acutal: ${actual.width}x${actual.height}`)
-  }
-
-  const diff = new PNG({ width: actual.width, height: actual.height })
-  const mismatchedPixelsCount = pixelmatch(expected.data, actual.data, diff.data, actual.width, actual.height)
-  const relativeThreshold = 0.01
-
-  debugLog(`Mismatching pixels: ${mismatchedPixelsCount} of ${actual.width * actual.height} pixels (${actual.width}x${actual.height} image)`)
-  const match = mismatchedPixelsCount < actual.width * actual.height * relativeThreshold
-
-  return {
-    match,
-    diff: diff
-  }
 }
