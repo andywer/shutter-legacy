@@ -55,7 +55,7 @@ export function bindSnapshotFileFunctions ({ lastRunPath, snapshotsPath }: Optio
 
       await Promise.all([
         writeStream(path.join(thisResultsPath, `actual.png`), actualPNG.pack()),
-        writeStream(path.join(thisResultsPath, `expectation.png`), expectedPNG.pack()),
+        writeStream(path.join(thisResultsPath, `expected.png`), expectedPNG.pack()),
         writeStream(path.join(thisResultsPath, `diff.png`), diffPNG.pack())
       ])
 
