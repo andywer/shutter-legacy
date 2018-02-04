@@ -1,0 +1,36 @@
+{
+  "name": "@andywer/shutter-react",
+  "version": "0.0.0",
+  "description": "Visual snapshot testing for React.js components with no effort.",
+  "license": "MIT",
+  "author": "Andy Wermke (https://github.com/andywer)",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "keywords": [
+    "component",
+    "react",
+    "snapshot",
+    "testing",
+    "visual"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "tslint --project . 'src/**/*.ts' -e '**/*.d.ts'",
+    "prepublishOnly": "yarn build && yarn test"
+  },
+  "peerDependencies": {
+    "react": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^16.0.36",
+    "@types/react-dom": "^16.0.3",
+    "react": "^16.2.0",
+    "tslint": "^5.9.1",
+    "tslint-config-standard": "^7.0.0",
+    "typescript": "^2.7.1"
+  },
+  "dependencies": {
+    "@andywer/shutter": "^0.0.0",
+    "react-dom": "^16.2.0"
+  }
+}
