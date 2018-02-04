@@ -29,7 +29,6 @@ export default async function snapshot (snapshotID: string, browser: Browser, se
     }
 
     const expectedPNGBuffer = await loadSnapshot(snapshotID)
-    const expectedPNG = await pngFromBuffer(expectedPNGBuffer)
     debugLog(`Diffing images`)
     const [ croppedExpected, croppedActual ] = await autoCropToMatch(expectedPNGBuffer, actualPNGBuffer)
     const { diff, mismatchedPixels, width, height } = await diffPNGs(croppedExpected, croppedActual)
