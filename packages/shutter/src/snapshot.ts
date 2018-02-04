@@ -3,11 +3,12 @@ import { PNG } from 'pngjs'
 import createDebugLogger = require('debug')
 import { bindSnapshotFileFunctions } from './fs'
 import { autoCrop, autoCropToMatch, diff as diffPNGs, pngFromBuffer } from './image'
+import resultLayout from './layout-result'
 
 const debugLog = createDebugLogger('shutter:snapshot')
 
 export default async function snapshot (snapshotID: string, browser: Browser, servedOnURL: string, options: Options) {
-  const { lastRunPath, snapshotsPath, updateSnapshot } = options
+  const { lastRunPath, snapshotsPath, testName, updateSnapshot } = options
   debugLog(`Creating snapshot ${snapshotID}`)
 
   const { snapshotExists, saveSnapshot, loadSnapshot, saveResults } = bindSnapshotFileFunctions({ lastRunPath, snapshotsPath })
@@ -37,12 +38,12 @@ export default async function snapshot (snapshotID: string, browser: Browser, se
     const relativeThreshold = 0.01
 
     debugLog(`Saving results`)
-    const resultsPath = await saveResults(snapshotID, croppedExpected, croppedActual, diff)
+    const resultsPath = await saveResults(snapshotID, croppedExpected, croppedActual, diff, resultLayout({ testName }))
 
     if (mismatchedPixels >= width * height * relativeThreshold) {
       debugLog(`Rendered document ${snapshotID} does not match snapshot.`)
       // TODO: Throw better error
-      throw new Error(`Screenshot does not match visual snapshot. See ${resultsPath}`)
+      throw new Error(`Screenshot does not match visual snapshot. See file://${resultsPath}/index.html`)
     } else {
       debugLog(`Rendered document ${snapshotID} matches snapshot.`)
     }
@@ -54,5 +55,6 @@ export default async function snapshot (snapshotID: string, browser: Browser, se
 export type Options = {
   lastRunPath: string,
   snapshotsPath: string,
+  testName: string,
   updateSnapshot: boolean
 }

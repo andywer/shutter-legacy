@@ -47,7 +47,7 @@ export function bindSnapshotFileFunctions ({ lastRunPath, snapshotsPath }: Optio
       return fs.readFile(snapshotPath(snapshotID))
     },
 
-    async saveResults (snapshotID: string, expectedPNG: PNG, actualPNG: PNG, diffPNG: PNG) {
+    async saveResults (snapshotID: string, expectedPNG: PNG, actualPNG: PNG, diffPNG: PNG, htmlContent: string) {
       const thisResultsPath = resultPath(snapshotID)
 
       await mkdirIfMissing(lastRunPath)
@@ -56,7 +56,8 @@ export function bindSnapshotFileFunctions ({ lastRunPath, snapshotsPath }: Optio
       await Promise.all([
         writeStream(path.join(thisResultsPath, `actual.png`), actualPNG.pack()),
         writeStream(path.join(thisResultsPath, `expected.png`), expectedPNG.pack()),
-        writeStream(path.join(thisResultsPath, `diff.png`), diffPNG.pack())
+        writeStream(path.join(thisResultsPath, `diff.png`), diffPNG.pack()),
+        fs.writeFile(path.join(thisResultsPath, 'index.html'), htmlContent, 'utf-8')
       ])
 
       return thisResultsPath

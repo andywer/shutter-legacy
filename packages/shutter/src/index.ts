@@ -44,6 +44,7 @@ export function createShutter (testDirPath: string, options: Options = {}): Shut
         await snapshot(snapshotID, browser, `http://localhost:${server.port}${serveOnPath}`, {
           lastRunPath,
           snapshotsPath,
+          testName,
           updateSnapshot: updateSnapshots
         })
       } finally {
