@@ -2,16 +2,25 @@ import { createShutter } from '@andywer/shutter'
 import { ReactElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
+const defaultRender = (element: ReactElement<any>): Promise<HTMLString> => {
+  return Promise.resolve(renderToStaticMarkup(element))
+}
+
 export function createReactShutter (testDirPath: string, options: Options = {}): ReactShutterInstance {
+  const {
+    render = defaultRender
+  } = options
+
   const shutter = createShutter(testDirPath, options)
+
   return {
     ...shutter,
 
     async snapshot (testName: string, element: ReactElement<any>) {
-      const html: HTMLString = renderToStaticMarkup(element)
+      const html: HTMLString = await render(element, defaultRender)
       return shutter.snapshot(testName, html)
     }
-  }
+  } as any as ReactShutterInstance
 }
 
 export type Options = {
@@ -27,6 +36,10 @@ export type Options = {
   // Defaults to `${testDirPath}/.last-run`
   lastRunPath?: string,
 
+  // Custom component renderer, receives the default renderer as second parameter, so it can use it
+  // Defaults to just rendering the React component to static HTML
+  render?: (reactElement: ReactElement<any>, originalRender: (reactElement: ReactElement<any>) => Promise<HTMLString>) => Promise<HTMLString>,
+
   // Path to directory where snapshots (the test expectations) will be saved
   // Defaults to `${testDirPath}/snapshots`
   snapshotsPath?: string
@@ -36,5 +49,5 @@ export type HTMLString = string
 
 export interface ReactShutterInstance {
   snapshot (testName: string, reactElement: ReactElement<any>): Promise<void>
-  serveDirectory (dirPathOnDisk: string): Promise<void>
+  serveDirectory (dirPathOnDisk: string): this
 }
