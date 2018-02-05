@@ -32,7 +32,7 @@ declare function createShutter (options: Options = {}): ShutterInstance
 export type Options = {
   // Custom renderer, taking some HTML content snippet and returning a complete HTML document
   // Defaults to looking for a custom layout file, falling back to a generic layout otherwise
-  layout?: (page: { content: HTMLString }) => HTMLString,
+  layout?: (content: HTMLString) => HTMLString,
 
   // Custom function to determine the port to use for the server
   // Defaults to using a random unused port

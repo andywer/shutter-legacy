@@ -1,7 +1,7 @@
 import test from 'ava'
 import { createShutter } from '@andywer/shutter'
 
-const layout = ({ content }: { content: string }) => `
+const layout = (content: string) => `
 <!doctype html>
 <html>
   <head>

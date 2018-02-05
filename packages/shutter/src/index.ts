@@ -35,7 +35,7 @@ export function createShutter (testDirPath: string, options: Options = {}): Shut
         const snapshotID = kebabCase(testName)
         // TODO: Warn or throw if snapshotID is used in different snapshot() calls
 
-        const documentHTML = layout({ content: html })
+        const documentHTML = layout(html)
         const serveOnPath = `/shutter-${snapshotID}`
 
         debugLogForServer(`Serving HTML to snapshot at http://localhost:${server.port}${serveOnPath}`)
@@ -64,7 +64,7 @@ export function createShutter (testDirPath: string, options: Options = {}): Shut
 export type Options = {
   // Custom renderer, taking some HTML content snippet and returning a complete HTML document
   // Defaults to looking for a custom layout file, falling back to a generic layout otherwise
-  layout?: (page: { content: HTMLString }) => HTMLString,
+  layout?: (content: HTMLString) => HTMLString,
 
   // Custom function to determine the port to use for the server
   // Defaults to using a random unused port

@@ -1,4 +1,4 @@
-const defaultLayout = ({ content }: { content: string }) => `
+const defaultLayout = (content: string) => `
 <!doctype html>
 <html>
   <head>
