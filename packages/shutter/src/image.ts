@@ -27,7 +27,7 @@ export async function diff (expected: PNG, actual: PNG) {
   }
 
   const diff = new PNG({ width: actual.width, height: actual.height })
-  const mismatchedPixels: number = pixelmatch(expected.data, actual.data, diff.data, actual.width, actual.height)
+  const mismatchedPixels: number = pixelmatch(expected.data, actual.data, diff.data, actual.width, actual.height, { includeAA: true })
 
   return {
     diff,
