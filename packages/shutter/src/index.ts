@@ -54,8 +54,9 @@ export function createShutter (testDirPath: string, options: Options = {}): Shut
         ])
       }
     },
-    async serveDirectory (dirPathOnDisk: string) {
+    serveDirectory (dirPathOnDisk: string) {
       directoriesToServe.push(dirPathOnDisk)
+      return this
     }
   }
 }
@@ -82,5 +83,5 @@ export type HTMLString = string
 
 export interface ShutterInstance {
   snapshot (testName: string, html: HTMLString): Promise<void>
-  serveDirectory (dirPathOnDisk: string): Promise<void>
+  serveDirectory (dirPathOnDisk: string): this
 }
