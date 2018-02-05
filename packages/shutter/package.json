@@ -16,6 +16,9 @@
     "test": "tslint --project . 'src/**/*.ts' -e '**/*.d.ts'",
     "prepublishOnly": "yarn build && yarn test"
   },
+  "files": [
+    "dist/"
+  ],
   "devDependencies": {
     "@types/dashify": "^1.0.0",
     "@types/debug": "^0.0.30",

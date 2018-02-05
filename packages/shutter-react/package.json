@@ -18,6 +18,9 @@
     "test": "tslint --project . 'src/**/*.ts' -e '**/*.d.ts'",
     "prepublishOnly": "yarn build && yarn test"
   },
+  "files": [
+    "dist/"
+  ],
   "peerDependencies": {
     "react": "*"
   },
