@@ -2,7 +2,8 @@
   "name": "shutter",
   "private": true,
   "scripts": {
-    "build": "oao run-script --parallel build",
+    "build": "oao run-script build",
+    "pretest": "yarn build",
     "test": "oao run-script --parallel test"
   },
   "workspaces": [
