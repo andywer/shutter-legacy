@@ -23,7 +23,7 @@ const jimpImageToPNG = async (image: Jimp): Promise<PNG> => {
 
 export async function diff (expected: PNG, actual: PNG) {
   if (actual.width !== expected.width || actual.height !== expected.height) {
-    throw new Error(`Image sizes do not match. Snapshot: ${expected.width}x${expected.height}. Acutal: ${actual.width}x${actual.height}`)
+    throw new Error(`Image sizes do not match. Snapshot: ${expected.width}x${expected.height}. Actual: ${actual.width}x${actual.height}`)
   }
 
   const diff = new PNG({ width: actual.width, height: actual.height })
