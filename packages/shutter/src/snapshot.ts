@@ -14,6 +14,10 @@ export default async function snapshot (snapshotID: string, browser: Browser, se
   const { snapshotExists, saveSnapshot, loadSnapshot, saveResults } = bindSnapshotFileFunctions({ lastRunPath, snapshotsPath })
   const page = await browser.newPage()
 
+  // Play animations really fast, so we capture the result (see https://github.com/GoogleChrome/puppeteer/issues/511)
+  const client = await page.target().createCDPSession()
+  await client.send('Animation.setPlaybackRate', { playbackRate: 1000.0 })
+
   // Note: No viewport set
 
   try {
