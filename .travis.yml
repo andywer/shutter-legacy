@@ -1,0 +1,7 @@
+addons:
+  chrome: stable
+sudo: required
+language: node_js
+node_js:
+  - node    # latest
+  - 8
