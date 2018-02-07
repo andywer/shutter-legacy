@@ -38,6 +38,10 @@ export type Options = {
   // Defaults to using a random unused port
   getPort?: () => Promise<number>,
 
+  // Custom threshold when to call it a mismatch. `0.01` means "if more than 1% of all pixels mismatch".
+  // Defaults to 0.01%
+  relativeThreshold?: number,
+
   // Path to directory where current run's snapshots and diffs will be saved
   // Defaults to `${testDirPath}/.last-run`
   lastRunPath?: string,

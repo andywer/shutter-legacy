@@ -8,7 +8,7 @@ import resultLayout from './layout-result'
 const debugLog = createDebugLogger('shutter:snapshot')
 
 export default async function snapshot (snapshotID: string, browser: Browser, servedOnURL: string, options: Options) {
-  const { lastRunPath, snapshotsPath, testName, updateSnapshot } = options
+  const { lastRunPath, relativeThreshold, snapshotsPath, testName, updateSnapshot } = options
   debugLog(`Creating snapshot ${snapshotID}`)
 
   const { snapshotExists, saveSnapshot, loadSnapshot, saveResults } = bindSnapshotFileFunctions({ lastRunPath, snapshotsPath })
@@ -35,12 +35,10 @@ export default async function snapshot (snapshotID: string, browser: Browser, se
     const { diff, mismatchedPixels, width, height } = await diffPNGs(croppedExpected, croppedActual)
 
     debugLog(`Mismatching pixels: ${mismatchedPixels} of ${width * height} pixels (${width}x${height} image)`)
-    const relativeThreshold = 0.01
-
     debugLog(`Saving results`)
     const resultsPath = await saveResults(snapshotID, croppedExpected, croppedActual, diff, resultLayout({ testName }))
 
-    if (mismatchedPixels >= width * height * relativeThreshold) {
+    if (mismatchedPixels > width * height * relativeThreshold) {
       debugLog(`Rendered document ${snapshotID} does not match snapshot.`)
       // TODO: Throw better error
       throw new Error(`Screenshot does not match visual snapshot. See file://${resultsPath}/index.html`)
@@ -54,6 +52,7 @@ export default async function snapshot (snapshotID: string, browser: Browser, se
 
 export type Options = {
   lastRunPath: string,
+  relativeThreshold: number,
   snapshotsPath: string,
   testName: string,
   updateSnapshot: boolean

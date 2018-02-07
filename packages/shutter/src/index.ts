@@ -15,7 +15,8 @@ export function createShutter (testDirPath: string, options: Options = {}): Shut
     getPort = defaultGetPort,
     layout = defaultLayout,
     lastRunPath = path.join(testDirPath, '.last-run'),
-    snapshotsPath = path.join(testDirPath, 'snapshots')
+    snapshotsPath = path.join(testDirPath, 'snapshots'),
+    relativeThreshold = 0.0001
   } = options
 
   const argv = minimist(process.argv.slice(2))
@@ -43,6 +44,7 @@ export function createShutter (testDirPath: string, options: Options = {}): Shut
 
         await snapshot(snapshotID, browser, `http://localhost:${server.port}${serveOnPath}`, {
           lastRunPath,
+          relativeThreshold,
           snapshotsPath,
           testName,
           updateSnapshot: updateSnapshots
@@ -69,6 +71,10 @@ export type Options = {
   // Custom function to determine the port to use for the server
   // Defaults to using a random unused port
   getPort?: () => Promise<number>,
+
+  // Custom threshold when to call it a mismatch. `0.01` means "if more than 1% of all pixels mismatch".
+  // Defaults to 0.01%
+  relativeThreshold?: number,
 
   // Path to directory where current run's snapshots and diffs will be saved
   // Defaults to `${testDirPath}/.last-run`
