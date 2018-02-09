@@ -5,3 +5,5 @@ language: node_js
 node_js:
   - node    # latest
   - 8
+before_install: npm i -g now
+after_script: now deploy --static packages/samples/test/.last-run --no-clipboard --token=$NOW_TOKEN --public
