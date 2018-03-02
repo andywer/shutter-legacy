@@ -12,10 +12,12 @@
     "@andywer/shutter": "^0.0.0",
     "@andywer/shutter-react": "^0.0.0",
     "ejs": "^2.5.7",
+    "material-ui": "^0.20.0",
     "styled-components": "^3.1.6"
   },
   "devDependencies": {
     "@types/ejs": "^2.5.0",
+    "@types/material-ui": "^0.20.5",
     "ava": "^0.25.0",
     "ava-ts": "^0.24.1",
     "react": "^16.2.0",
